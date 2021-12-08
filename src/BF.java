@@ -1,3 +1,4 @@
+import javafx.geometry.Pos;
 import org.junit.Test;
 
 /**
@@ -18,12 +19,36 @@ public class BF {
         System.out.println("子串在主串中的位置为：" + location);
     }
 
+    //BF算法 （从头开始搜索）
+
     public  int indexBF(String S,String T){           // S为主串，T为字串
         char[] s = S.toCharArray();                  // 将字符串转换为字符数组
         char[] t = T.toCharArray();
         int i = 0;                                   //  Java 中 charAt（）该方法下标从 0 开始 切记 ！！！
         int j = 0;
-        while (i < s.length && j < t.length){
+        while (i < s.length && j < t.length){        // 匹配成功所有字符都匹配完  or  主串所有字符都扫描完
+            if (s[i] == t[j]){
+                i++; j++;                           // 主串和子串依次匹配下一个字符
+            }else {
+                i = i - j + 1;                      // 主串回溯到下一个位置   理解： 减去 j 走过的步数  （ i - j (回到开始) + 1 （向前一格） ）
+                j = 0 ;                             // 子串从头开始
+            }
+        }
+        if (j >= T.length()){                      // 子串走完所有长度，匹配成功
+            return i - t.length;                   // 返回匹配的第一个字符下标
+        }else {
+            return -1;                             // 模式匹配不成功
+        }
+    }
+
+    //BF算法 （从指定位置开始搜索）
+
+    public int indexBF(String S,String T , int Pos){        // S为主串，T为字串
+        char[] s = S.toCharArray();                  // 将字符串转换为字符数组
+        char[] t = T.toCharArray();
+        int i = Pos;                                   //  Java 中 charAt（）该方法下标从 0 开始 切记 ！！！
+        int j = 0;
+        while (i < s.length && j < t.length){        // 匹配成功所有字符都匹配完  or  主串所有字符都扫描完
             if (s[i] == t[j]){
                 i++; j++;                           // 主串和子串依次匹配下一个字符
             }else {
