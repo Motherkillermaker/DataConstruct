@@ -1,4 +1,3 @@
-import javafx.geometry.Pos;
 import org.junit.Test;
 
 /**
