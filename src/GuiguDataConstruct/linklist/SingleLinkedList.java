@@ -29,15 +29,15 @@ public class SingleLinkedList {
         SingleLinkList linkList1 = new SingleLinkList();
         // 将节点加入链表
         linkList.add(node1);
-        linkList.add(node3);
+        linkList.add(node2);
         linkList.add(node4);
-        linkList.add(node7);
         linkList.add(node8);
+        linkList.add(node9);
 
-        linkList1.add(node2);
+        linkList1.add(node3);
         linkList1.add(node5);
         linkList1.add(node6);
-        linkList1.add(node9);
+        linkList1.add(node7);
         linkList1.add(node10);
 
         // 显示单链表

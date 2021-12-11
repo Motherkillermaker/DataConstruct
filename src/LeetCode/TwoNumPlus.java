@@ -6,31 +6,44 @@ package LeetCode;
  */
 public class TwoNumPlus {
     public static void main(String[] args) {
+        ListNode l1 = new ListNode(1);
+        l1.next = new ListNode(1);
+        ListNode l2 = new ListNode(9);
+        l2.next = new ListNode(8);
+
+        ListNode node = addTwoNumbers(l1, l2);
+        System.out.println(node);
+
 
     }
-}
-
-
-// 定义单链表
-class LinkList{
-    private ListNode head = new ListNode(0);
-
-    // 逆序添加结点到链表 （逆序插入）
-    public void addReverse(ListNode node1,ListNode node2){
-        ListNode temp = head;
-        while (true){
-            if (temp.next == null){
-                // 遍历到表尾的后一个元素
-                break;
+    public static ListNode addTwoNumbers(ListNode l1,ListNode l2){
+        // l1,l2 是逆序存储数组的链表
+        ListNode head = new ListNode(0);
+        ListNode temp1 = l1, temp2 = l2;
+        ListNode currentNode = head;
+        int carry = 0;                              // 用于携带进位
+        while (temp1 != null || temp2!= null){
+            int x = (temp1 != null) ? l1.val:0;     // temp1 != null 为条件
+            int y = (temp2 != null) ? l2.val:0;     // temp1 != null 为条件
+            int sum = x + y + carry;                // carry 初始为 0，后续为之前携带的值
+            carry = sum / 10;                       // 更新 carry 的值，将进位带入下一次运算
+            currentNode.next = new ListNode(sum % 10);  // 两结点之和 与 10 的模 为新链表的节点值
+            currentNode = currentNode.next;         // 新链表指针移动
+            if (temp1 != null){
+                temp1 = temp1.next;
             }
-            // 没有到达表尾则继续遍历链表
-            temp = temp.next;
+            if (temp2 != null){
+                temp2 = temp2.next;
+            }
         }
-        //结束循环时， temp 就指向链表最后元素
-
-
+        // 链表结束时carry = 1 ,则还需新增一个结点
+        if (carry > 0){
+            currentNode.next = new ListNode(carry);
+        }
+        return head;
     }
 }
+
 
 // 定义节点
 class ListNode{
@@ -44,5 +57,13 @@ class ListNode{
     public ListNode(int val, ListNode next) {
         this.val = val;
         this.next = next;
+    }
+
+    @Override
+    public String toString() {
+        return "ListNode{" +
+                "val=" + val +
+                ", next=" + next +
+                '}';
     }
 }
