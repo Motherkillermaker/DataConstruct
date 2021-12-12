@@ -12,8 +12,8 @@ public class Sort {
 
     @Test
     public void test(){
-        int maxSize = 50000;
-        System.out.println("*****************测试冒泡排序************************");
+        int maxSize = 80000;
+        System.out.println("*****************测试冒泡排序*****************************");
         int[] arr1 = new int[maxSize];
         for (int i = 0; i < arr1.length; i++) {
             arr1[i] = (int) (Math.random() * arr1.length * 100 );
@@ -33,7 +33,7 @@ public class Sort {
         long end2 = System.currentTimeMillis();
         System.out.println("所花费时间为: " + (end2 - begin2));
 
-        System.out.println("*****************测试选择排序************************");
+        System.out.println("*****************测试选择排序*****************************");
         int[] arr3 = new int[maxSize];
         for (int i = 0; i < arr3.length; i++) {
             arr3[i] = (int) (Math.random() * arr3.length * 100 );
@@ -43,6 +43,15 @@ public class Sort {
         long end3 = System.currentTimeMillis();
         System.out.println("所花费时间为: " + (end3 - begin3));
 
+        System.out.println("*****************测试直接插入排序************************");
+        int[] arr4 = new int[maxSize];
+        for (int i = 0; i < arr4.length; i++) {
+            arr4[i] = (int) (Math.random() * arr4.length * 100 );
+        }
+        long begin4 = System.currentTimeMillis();
+        SelectSort(arr4);
+        long end4 = System.currentTimeMillis();
+        System.out.println("所花费时间为: " + (end4 - begin4));
 
     }
 
