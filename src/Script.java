@@ -8,13 +8,9 @@ import java.util.Arrays;
  */
 public class Script {
     public static void main(String[] args) {
-        int[] arr1 = new int[]{9,5,1,3,10,7,4,6,2,8};
-        shellSort(arr1);
-        System.out.println(Arrays.toString(arr1));
-        int[] arr2 = new int[]{5,2,8,1,7,4,6,3,9,10};
-        InsertSort(arr2);
-        System.out.println(Arrays.toString(arr2));
-
+        int[] arr =  getRandomArray(50);
+        QuickSort(arr,0,arr.length - 1);
+        System.out.println(Arrays.toString(arr));
     }
 
     // 直接插入排序
@@ -30,6 +26,20 @@ public class Script {
                 arr[insertIndex + 1] = x;             // 重要： 将 x 插入到正确位置 (上一次进入循环时 insertIndex 已经减 1)
             }
         }
+    }
+
+    // 获取随机数组
+    public static int[] getRandomArray(int maxSize){
+        int[] array = getArray(maxSize);
+        for (int i = 0; i < array.length; i++) {
+            array[i] = (int) (Math.random() * array.length * 100 );
+        }
+        return array;
+    }
+
+    // 获取数组
+    public static int[] getArray(int maxSize){
+        return new int[maxSize];
     }
 
     //希尔排序（位移法）
@@ -48,6 +58,37 @@ public class Script {
             }
         }
     }
+
+    //快速排序 （low high 为开始时的索引）
+    public static void QuickSort(int[] arr,int low,int high){
+        if (low < high){
+            // 长度大于1 => 继续递归
+            int pivotloc = Partition(arr,low,high);     // 将数组一分为二，pivotloc为枢轴元素排好序的位置
+            QuickSort(arr,low,pivotloc - 1);
+            QuickSort(arr,pivotloc + 1,high);
+        }
+    }
+
+    // 快速排序确定中枢位置
+    public static int Partition(int[] arr,int low,int high){
+        int pivot = arr[low];   // 中间变量,初始值为传入数组第一个元素（中枢值）
+        while (low < high){
+            // 从后面找大于中枢的值
+            while (low < high && arr[high] >= pivot ){
+                high--;
+            }
+            arr[low] = arr[high];     // 将大于中枢的元素放置到 low 位置
+            // 从前面找小于中枢的值
+            while (low < high && arr[low] <= pivot){
+                low++;
+            }
+            arr[high] = arr[low];
+        }
+        // 结束循环，此时 low 和 high 相等 => 该位置用于放置中枢位置
+        arr[low] = pivot;
+        return low ;
+    }
+
 
 }
 

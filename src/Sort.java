@@ -15,27 +15,34 @@ public class Sort {
     @Test
     public void test(){
 
-        int maxSize = 80000;
+        int maxSize = 1000000;
         System.out.println("*****************测试冒泡排序*****************************");
-        testSolution(maxSize,"BubbleSort");
+//        testSolution(maxSize,"BubbleSort");
 
         System.out.println("*****************测试改进的冒泡排序************************");
-        testSolution(maxSize,"BubbleSortPlus");
+//        testSolution(maxSize,"BubbleSortPlus");
 
         System.out.println("*****************测试选择排序*****************************");
-        testSolution(maxSize,"SelectSort");
+//        testSolution(maxSize,"SelectSort");
 
         System.out.println("*****************测试直接插入排序************************");
-        testSolution(maxSize,"InsertSort");
+//        testSolution(maxSize,"InsertSort");
 
         System.out.println("*****************测试折半插入排序************************");
-        testSolution(maxSize,"BInsertSort");
+//        testSolution(maxSize,"BInsertSort");
 
         System.out.println("*****************测试希尔排序（交换法）排序************************");
-        testSolution(maxSize,"shellSortExchange");
+//        testSolution(maxSize,"shellSortExchange");
 
         System.out.println("*****************测试希尔排序（移位法）排序************************");
         testSolution(maxSize,"shellSort");
+
+        System.out.println("*****************测试快速排序排序************************");
+        int[] arr = getRandomArray(maxSize);
+        long begin = System.currentTimeMillis();
+        QuickSort(arr,0,arr.length - 1);
+        long end = System.currentTimeMillis();
+        System.out.println("所花费时间为: " + (end - begin));
 
     }
 
@@ -71,6 +78,15 @@ public class Sort {
         }
 
 
+    }
+
+    // 获取随机数组
+    public int[] getRandomArray(int maxSize){
+        int[] array = getArray(maxSize);
+        for (int i = 0; i < array.length; i++) {
+            array[i] = (int) (Math.random() * array.length * 100 );
+        }
+        return array;
     }
 
     // 获取数组
@@ -225,9 +241,41 @@ public class Sort {
 
     }
 
+    //快速排序 （low high 为开始时的数组索引 => 递归）
+    public void QuickSort(int[] arr,int low,int high){
+        if (low < high){
+            // 长度大于1 => 继续递归
+            int pivotloc = Partition(arr,low,high);     // 将数组一分为二，pivotloc为枢轴元素排好序的位置
+            QuickSort(arr,low,pivotloc - 1);       // 小于中枢的元素组成的数组
+            QuickSort(arr,pivotloc + 1,high);       // 大于中枢的元素组成的数组
+        }
+    }
 
-    //快速排序
+    // 快速排序确定中枢位置
+    public int Partition(int[] arr,int low,int high){
+        int pivot = arr[low];   // 中间变量,初始值为传入数组第一个元素（中枢值）
+        while (low < high){
+            // 从后面找大于中枢的值
+            // 拓展：若从大到小排序，只需把大于中枢的往前搬，小于中枢的往后搬即可
+            while (low < high && arr[high] >= pivot ){
+                high--;
+            }
+            arr[low] = arr[high];     //  小于中枢的从后往前搬
+            // 从前面找小于中枢的值
+            while (low < high && arr[low] <= pivot){
+                low++;
+            }
+            arr[high] = arr[low];    //  大于中枢的从前往后搬
+        }
+        // 结束循环，此时 low 和 high 相等 => 该位置用于放置中枢位置
+        arr[low] = pivot;
+        return low ;
+    }
 
+    // 归并排序
+    public void MergeSort(int[] arr){
+
+    }
 
 
 }

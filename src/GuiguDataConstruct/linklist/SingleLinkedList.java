@@ -86,7 +86,7 @@ public class SingleLinkedList {
 
     }
 
-    // 合并两个有序的单链表（合并之后依然有序）
+    // 合并两个有序的单链表（合并之后依然有序） => 归并排序思想 （数组的实现）
     public static SingleLinkList mergeList(HeroNode headone,HeroNode headtwo){
         if (headone.next == null && headtwo.next == null ){
             // 空链表
@@ -113,7 +113,6 @@ public class SingleLinkedList {
             temp.next = temp1;                           // temp2 为空，将temp1接在新链表后面
         }else {
             // 此处有一个bug: 若最后 tem2 与 temp 为相同节点，就会出现递归，导致 temp 后面的结点无限 => 故若两个结点的 no 相同，则它们必须是不同的结点（后面的名字不同）
-
             temp.next = temp2;                           // temp1 为空，将temp2接在新链表后面
         }
         return newlist;
