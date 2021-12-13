@@ -115,7 +115,7 @@ public class Sort {
             if (arr[i] < arr[i -1]){        // 当前位置元素小于前一个，需要进行排序
                 int x = arr[i];             // 复制当前需要排序的元素
                 for (insertIndex = i - 1; insertIndex >= 0 && x < arr[insertIndex]; insertIndex--){     // 顺序查找插入位置 （从后往前）=> 若 x < arr[insertIndex] 则循环继续
-                    arr[insertIndex + 1] = arr[insertIndex];                                            // 当前位置比要插入的元素大，当前元素后移 （当前位置 j 即为要插入的位置）
+                    arr[insertIndex + 1] = arr[insertIndex];                                            // 当前位置比要插入的元素大，当前元素后移 （当前位置 j + 1 即为要插入的位置）
                 }
                 arr[insertIndex + 1] = x;             // 重要： 将 x 插入到正确位置 (上一次进入循环时 insertIndex 已经减 1)
             }
@@ -142,6 +142,51 @@ public class Sort {
             arr[high + 1] = x;              //  将元素插入到正确位置
         }
     }
+
+    //希尔排序(交换法 => 速度较慢)
+    public void shellSortExchange(int[] arr){
+        //思想：先根据步长将数组分组，组内先排序，最后在进行一次冒泡排序
+        int temp = 0;
+        int count =0;
+        // 定义一共循环的轮数
+        for (int gap = arr.length / 2; gap > 0 ; gap /= 2) {
+            for (int i = gap; i < arr.length; i++) {
+                // 遍历各组中的元素（共 gap 个组），步长为 gap
+                for (int j = i - gap; j >= 0 ; j -= gap) {
+                    // 每组中如果当前元素大于后面元素则交换
+                    if (arr[j] > arr[j + gap]){
+                        temp = arr[j];
+                        arr[j] = arr[j + temp];
+                        arr[j + temp] = temp;
+                    }
+                }
+            }
+            System.out.println("希尔排序第" + (++count) + "轮=" + Arrays.toString(arr));
+
+        }
+
+    }
+
+    //希尔排序(移位法)
+    public void shellSortMove(int[] arr){
+        for (int gap = arr.length / 2; gap > 0; gap /= 2) {
+            // 从第gap个元素，逐个对其所在的组进行直接插入排序
+            for (int i = gap; i < arr.length; i++) {
+                int j = i;              // 保存待插入位置的下标
+                int temp = arr[j];      // 保存待插入元素
+                if (arr[j] < arr[j - gap]){     // 组内需要排序
+                    while (j - gap >= 0 && temp < arr[j-gap]){
+                        arr[j] = arr[j - gap]; // 前面的元素（较大）移到了后面
+                        j -= gap;
+                    }
+                    // 找到了插入位置
+                    arr[j] = temp;
+                }
+            }
+        }
+
+    }
+
 
 
 }
