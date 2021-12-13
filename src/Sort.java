@@ -1,5 +1,7 @@
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
@@ -12,47 +14,68 @@ public class Sort {
 
     @Test
     public void test(){
+
         int maxSize = 80000;
         System.out.println("*****************测试冒泡排序*****************************");
-        int[] arr1 = new int[maxSize];
-        for (int i = 0; i < arr1.length; i++) {
-            arr1[i] = (int) (Math.random() * arr1.length * 100 );
-        }
-        long begin1 = System.currentTimeMillis();
-        BubbleSort(arr1);
-        long end1 = System.currentTimeMillis();
-        System.out.println("所花费时间为: " + (end1 - begin1));
+        testSolution(maxSize,"BubbleSort");
 
         System.out.println("*****************测试改进的冒泡排序************************");
-        int[] arr2 = new int[maxSize];
-        for (int i = 0; i < arr2.length; i++) {
-            arr2[i] = (int) (Math.random() * arr2.length * 100 );
-        }
-        long begin2 = System.currentTimeMillis();
-        BubbleSortPlus(arr2);
-        long end2 = System.currentTimeMillis();
-        System.out.println("所花费时间为: " + (end2 - begin2));
+        testSolution(maxSize,"BubbleSortPlus");
 
         System.out.println("*****************测试选择排序*****************************");
-        int[] arr3 = new int[maxSize];
-        for (int i = 0; i < arr3.length; i++) {
-            arr3[i] = (int) (Math.random() * arr3.length * 100 );
-        }
-        long begin3 = System.currentTimeMillis();
-        SelectSort(arr3);
-        long end3 = System.currentTimeMillis();
-        System.out.println("所花费时间为: " + (end3 - begin3));
+        testSolution(maxSize,"SelectSort");
 
         System.out.println("*****************测试直接插入排序************************");
-        int[] arr4 = new int[maxSize];
-        for (int i = 0; i < arr4.length; i++) {
-            arr4[i] = (int) (Math.random() * arr4.length * 100 );
-        }
-        long begin4 = System.currentTimeMillis();
-        SelectSort(arr4);
-        long end4 = System.currentTimeMillis();
-        System.out.println("所花费时间为: " + (end4 - begin4));
+        testSolution(maxSize,"InsertSort");
 
+        System.out.println("*****************测试折半插入排序************************");
+        testSolution(maxSize,"BInsertSort");
+
+        System.out.println("*****************测试希尔排序（交换法）排序************************");
+        testSolution(maxSize,"shellSortExchange");
+
+        System.out.println("*****************测试希尔排序（移位法）排序************************");
+        testSolution(maxSize,"shellSort");
+
+    }
+
+    /** 测试方法
+     * 通过传入方法名来调用方法
+     * @param maxSize
+     * @param solution
+     */
+    public void testSolution(int maxSize,String solution){
+        int[] array = getArray(maxSize);
+        try {
+            Class<?> clazz = Class.forName("Sort");                             // 获取类
+            Method method = clazz.getMethod(solution, int[].class);             // 获取方法
+            for (int i = 0; i < array.length; i++) {
+                array[i] = (int) (Math.random() * array.length * 100 );
+            }
+            long begin = System.currentTimeMillis();
+            try {
+                try {
+                    method.invoke(clazz.newInstance(),array);                   // 方法的执行
+                } catch (InvocationTargetException | InstantiationException e) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalAccessException e) {
+                System.out.println("输入的参数类型异常，请重新输入！");
+            }
+            long end = System.currentTimeMillis();
+            System.out.println("所花费时间为: " + (end - begin));
+        } catch (ClassNotFoundException e) {
+            System.out.println("没有该类！");
+        } catch (NoSuchMethodException e) {
+            System.out.println("没有该方法");
+        }
+
+
+    }
+
+    // 获取数组
+    public int[] getArray(int maxSize){
+        return new int[maxSize];
     }
 
     // 冒泡排序
@@ -109,13 +132,13 @@ public class Sort {
 
     // 直接插入排序
     public void InsertSort(int[] arr){
-        //思想： 前i个有序，后j个无序，依次从无序序列中选取元素插入到有序序列中 （查找到指定位置为重点 => 二分查找）
+        //思想： 前i个有序，后j个无序，依次从无序序列中选取元素插入到有序序列中 （查找到指定位置为重点 =>  依次查找/二分查找）
         int i,insertIndex;                  // i为无序位置的第一个元素，insertIndex 为插入过程中寻找的下标
         for (i = 1; i < arr.length; i++){   // 从第二个元素开始依次执行 n - 1 次
             if (arr[i] < arr[i -1]){        // 当前位置元素小于前一个，需要进行排序
                 int x = arr[i];             // 复制当前需要排序的元素
                 for (insertIndex = i - 1; insertIndex >= 0 && x < arr[insertIndex]; insertIndex--){     // 顺序查找插入位置 （从后往前）=> 若 x < arr[insertIndex] 则循环继续
-                    arr[insertIndex + 1] = arr[insertIndex];                                            // 当前位置比要插入的元素大，当前元素后移 （当前位置 j + 1 即为要插入的位置）
+                    arr[insertIndex + 1] = arr[insertIndex];                                            // 当前位置比要插入的元素大(循环条件)，当前元素后移 （当前位置 j + 1 即为要插入的位置）
                 }
                 arr[insertIndex + 1] = x;             // 重要： 将 x 插入到正确位置 (上一次进入循环时 insertIndex 已经减 1)
             }
@@ -134,58 +157,76 @@ public class Sort {
                     high = mid - 1;          // 在左半区查找
                 }else {
                     low = mid + 1;           // 在右半区查找
-                } // 循环结束， high + 1 为插入位置
+                }                            // 循环结束， high + 1 为插入位置
             }
             for (j = i - 1; j >= high + 1; j--){
-                arr[j + 1] = arr[j];        //  移动元素，空出 high + 1 的位置
+                arr[j + 1] = arr[j];         //  移动元素，空出 high + 1 的位置
             }
-            arr[high + 1] = x;              //  将元素插入到正确位置
+            arr[high + 1] = x;               //  将元素插入到正确位置
         }
     }
 
     //希尔排序(交换法 => 速度较慢)
     public void shellSortExchange(int[] arr){
-        //思想：先根据步长将数组分组，组内先排序，最后在进行一次冒泡排序
+        //思想：先根据步长将数组分组，组内先排序（交换），最后在进行一次冒泡排序 => 减少插入排序比较和交换的次数
         int temp = 0;
-        int count =0;
         // 定义一共循环的轮数
         for (int gap = arr.length / 2; gap > 0 ; gap /= 2) {
             for (int i = gap; i < arr.length; i++) {
-                // 遍历各组中的元素（共 gap 个组），步长为 gap
+                // 遍历各组中的元素（共 gap 个组），步长为 gap => 组内冒泡排序
                 for (int j = i - gap; j >= 0 ; j -= gap) {
                     // 每组中如果当前元素大于后面元素则交换
                     if (arr[j] > arr[j + gap]){
                         temp = arr[j];
-                        arr[j] = arr[j + temp];
-                        arr[j + temp] = temp;
+                        arr[j] = arr[j + gap];
+                        arr[j + gap] = temp;
                     }
                 }
             }
-            System.out.println("希尔排序第" + (++count) + "轮=" + Arrays.toString(arr));
-
         }
 
     }
 
-    //希尔排序(移位法)
+    //希尔排序（位移法 => 速度较快）
+    public static void shellSort(int[] arr){
+        int insertIndex = 0;
+        for (int gap = arr.length / 2; gap > 0 ; gap /= 2) {
+            for (int i = gap; i < arr.length ; i++) {
+                if (arr[i] < arr[i - gap]){         // 当前组内后面的元素比前面的小
+                    int x = arr[i];                 // 复制当前需要排序的元素（较小元素）
+                    // 借助插入排序的思想 => 此时为组内元素进行比较,间距为gap
+                    // 从当前元素的前一个开始，满足条件则交换，最后一次进入循环时 insertIndex 已经移动
+                    for (insertIndex = i - gap; insertIndex >= 0 && x < arr[insertIndex] ; insertIndex-= gap) {
+                        arr[insertIndex + gap] = arr[insertIndex];  // 当前位置比要插入的元素大(循环条件)，当前元素后移 （当前位置 insertIndex + gap 即为要插入的位置）
+                    }
+                    arr[insertIndex + gap] = x;
+                }
+            }
+        }
+    }
+
+    //希尔排序(移位法韩顺平版本)
     public void shellSortMove(int[] arr){
         for (int gap = arr.length / 2; gap > 0; gap /= 2) {
             // 从第gap个元素，逐个对其所在的组进行直接插入排序
             for (int i = gap; i < arr.length; i++) {
-                int j = i;              // 保存待插入位置的下标
-                int temp = arr[j];      // 保存待插入元素
+                int j = i;                      // 保存待插入位置的下标 (第一轮为中间位置的下一个元素)
+                int x = arr[j];                 // 保存待插入元素
                 if (arr[j] < arr[j - gap]){     // 组内需要排序
-                    while (j - gap >= 0 && temp < arr[j-gap]){
-                        arr[j] = arr[j - gap]; // 前面的元素（较大）移到了后面
+                    while (j - gap >= 0 && x < arr[j-gap]){
+                        arr[j] = arr[j - gap];  // 前面的元素（较大）移到了后面
                         j -= gap;
                     }
                     // 找到了插入位置
-                    arr[j] = temp;
+                    arr[j] = x;
                 }
             }
         }
 
     }
+
+
+    //快速排序
 
 
 
