@@ -15,7 +15,7 @@ public class Sort {
     @Test
     public void test(){
 
-        int maxSize = 1000000;
+        int maxSize = 5000000;
         System.out.println("*****************测试冒泡排序*****************************");
 //        testSolution(maxSize,"BubbleSort");
 
@@ -37,12 +37,15 @@ public class Sort {
         System.out.println("*****************测试希尔排序（移位法）排序************************");
         testSolution(maxSize,"shellSort");
 
-        System.out.println("*****************测试快速排序排序************************");
+        System.out.println("*****************测试快速排序************************");
         int[] arr = getRandomArray(maxSize);
         long begin = System.currentTimeMillis();
         QuickSort(arr,0,arr.length - 1);
         long end = System.currentTimeMillis();
         System.out.println("所花费时间为: " + (end - begin));
+
+        System.out.println("*****************测试基数排序************************");
+        testSolution(maxSize,"radixSort");
 
     }
 
@@ -94,7 +97,7 @@ public class Sort {
         return new int[maxSize];
     }
 
-    // 冒泡排序
+    // 冒泡排序（n^2）
     public void BubbleSort(int[] arr){
         // 思想：依次比较前后两个元素，将较大位置元素放在后面
         // 第 i 趟 需要 比较 j 次 => i +j = n (n 为元素总数)
@@ -110,7 +113,7 @@ public class Sort {
         }
     }
 
-    //改进的冒泡排序
+    //改进的冒泡排序(n^2)
     public void BubbleSortPlus(int[] arr){
         int flag =  1;                                     // flag 作为是否有交换的标记
         int m,j,temp;                                      // 交换临时存储 (m : 总共需要几趟     j: 每一趟需要的次数)
@@ -127,7 +130,7 @@ public class Sort {
         }
     }
 
-    //简单选择排序
+    //简单选择排序(n^2)
     public void SelectSort(int[] arr){
         // 思想：遍历未排序的所有元素后将最小值按顺序放到指定位置
         int i,j,k,temp;
@@ -146,7 +149,7 @@ public class Sort {
         }
     }
 
-    // 直接插入排序
+    // 直接插入排序(n^2)
     public void InsertSort(int[] arr){
         //思想： 前i个有序，后j个无序，依次从无序序列中选取元素插入到有序序列中 （查找到指定位置为重点 =>  依次查找/二分查找）
         int i,insertIndex;                  // i为无序位置的第一个元素，insertIndex 为插入过程中寻找的下标
@@ -161,7 +164,7 @@ public class Sort {
         }
     }
 
-    // 折半插入排序
+    // 折半插入排序(n^2)
     public void BInsertSort(int[] arr){
         int i,j;  // i为无序位置的第一个元素，j为插入过程中寻找的下标
         for (i = 1; i < arr.length; i++) {   // 从第二个元素开始依次执行
@@ -203,7 +206,7 @@ public class Sort {
 
     }
 
-    //希尔排序（位移法 => 速度较快）
+    //希尔排序（位移法 => 速度较快） (nlogn)
     public static void shellSort(int[] arr){
         int insertIndex = 0;
         for (int gap = arr.length / 2; gap > 0 ; gap /= 2) {
@@ -241,7 +244,7 @@ public class Sort {
 
     }
 
-    //快速排序 （low high 为开始时的数组索引 => 递归）
+    //快速排序 （low high 为开始时的数组索引 => 递归）(nlogn)
     public void QuickSort(int[] arr,int low,int high){
         if (low < high){
             // 长度大于1 => 继续递归
@@ -272,10 +275,88 @@ public class Sort {
         return low ;
     }
 
-    // 归并排序
-    public void MergeSort(int[] arr){
-
+    // 归并排序(nlogn)
+    public void MergeSort(int[] arr,int start,int end){
+        if (start < end){
+            int mid = (start + end) / 2;        // 划分子序列
+            MergeSort(arr,start,mid);           // 左子序列递归
+            MergeSort(arr,mid + 1,end);    // 右子序列递归
+            merge(arr,start,mid,end);           // 排序好的数组合并
+        }
     }
+
+    // 两路归并排序 => 两个有序序列合并为一个子序列
+    public void merge(int[] arr,int left,int mid,int right){
+        // mid 为第一个序列的末尾
+        int[] temp = new int[arr.length];       // 辅助数组
+        int p1 = left,p2 = mid + 1,k = left;    // p1、p1为检测指针，K为temp中的指针
+        // 两个序列都有元素时依次比较，将较小的元素放入temp 数组
+        while (p1 <=  mid && p2 <= right){
+            if (arr[p1] <= arr[p2]){
+                temp[k] = arr[p1];              // 较小元素放入temp，两指针后移
+                p1++; k++;
+            }else {
+                temp[k] = arr[p2];
+                p2++;k++;                      // 较小元素放入temp，两指针后移
+            }
+        }
+        // 循环结束时有一个序列已经检测完
+        // 第一个序列未检测完
+        while (p1 <= mid){
+            temp[k] = arr[p1];
+            p1++; k++;
+        }
+        // 第二个序列未检测完
+        while (p2 <= right){
+            temp[k] = arr[p2];
+            p2++;k++;
+        }
+        // 此时 temp 数组为排好序的数组 => 复制回原来的数组
+        for (int i = left; i <= right ; i++) {
+            arr[i] = temp[i];
+        }
+    }
+
+    //基数排序（桶排序）(n+k)
+    public void radixSort(int[] arr){
+        // 80000000 * 11 * 4 / 1024 /1024 / 1024 = 3.3 G  => 8000w 个数据需要约 3.3 g 的内存数据
+        // 思想： 将数组统一为一样的位数长度，依次从最低位进行排序 （有负数的话不支持，需要改进）
+        // 得到数组中最大的数的位数
+        int max = arr[0];
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > max){
+                max = arr[i];
+            }
+        }
+        int maxLength = (max + "").length();            // 最大数的位数
+        int[][] bucket = new int[10][arr.length];       //0 - 9,长度为数组长度
+        int[] ElementCounts = new int[10];              // 记录每个桶的元素个数（0-9）
+        for (int i = 0,n = 1; i < maxLength; i++,n *= 10) {
+            // 按照个、十、百的顺序放入桶中
+            for (int j = 0; j < arr.length; j++) {
+                // 取出个位数/十位数/百位数的值
+                int finalNum = arr[j] / n % 10;
+                // 放入桶中(ge表示该放哪个桶，)
+                bucket[finalNum][ElementCounts[finalNum]] = arr[j];
+                ElementCounts[finalNum]++;
+            }
+            // 遍历每一个桶，依次从桶中取出
+            int index = 0;
+            for (int k = 0; k < ElementCounts.length; k++) {
+                // 如果有数据则取出
+                if (ElementCounts[k] != 0){
+                    for (int l = 0; l < ElementCounts[k]; l++) {
+                        arr[index] = bucket[k][l];
+                        index++;
+                    }
+                }
+                ElementCounts[k] = 0;           // 将桶清零
+            }
+//            System.out.println("第" + (i + 1)+ "轮，排序后 arr= " + Arrays.toString(arr));
+        }
+    }
+
+
 
 
 }

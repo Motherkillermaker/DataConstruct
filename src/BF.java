@@ -41,7 +41,6 @@ public class BF {
     }
 
     //BF算法 （从指定位置开始搜索）
-
     public int indexBF(String S,String T , int Pos){        // S为主串，T为字串
         char[] s = S.toCharArray();                  // 将字符串转换为字符数组
         char[] t = T.toCharArray();

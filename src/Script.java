@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class Script {
     public static void main(String[] args) {
         int[] arr =  getRandomArray(50);
-        QuickSort(arr,0,arr.length - 1);
+        radixSort(arr);
         System.out.println(Arrays.toString(arr));
     }
 
@@ -87,6 +87,83 @@ public class Script {
         // 结束循环，此时 low 和 high 相等 => 该位置用于放置中枢位置
         arr[low] = pivot;
         return low ;
+    }
+
+    // 归并排序
+    public static void MergeSort(int[] arr,int start,int end){
+        if (start < end){
+            int mid = (start + end) / 2;        // 划分子序列
+            MergeSort(arr,start,mid);           // 左子序列递归
+            MergeSort(arr,mid + 1,end);    // 右子序列递归
+            merge(arr,start,mid,end);           // 排序好的数组合并
+        }
+    }
+
+    // 两路归并排序 => 两个有序序列合并为一个子序列
+    public static void merge(int[] arr,int left,int mid,int right){
+        int[] temp = new int[arr.length];       // 辅助数组
+        int p1 = left,p2 = mid + 1,k = left;    // p1、p1为检测指针，K为temp中的指针
+        while (p1 <=  mid && p2 <= right){
+            if (arr[p1] <= arr[p2]){
+                temp[k] = arr[p1];
+                p1++; k++;
+            }else {
+                temp[k] = arr[p2];
+                p2++;k++;
+            }
+        }
+        // 第一个序列检测完
+        while (p1 <= mid){
+            temp[k] = arr[p1];
+            p1++; k++;
+        }
+        // 第二个序列检测完
+        while (p2 <= right){
+            temp[k] = arr[p2];
+            p2++;k++;
+        }
+        // 复制回原来的数组
+        for (int i = left; i <= right ; i++) {
+            arr[i] = temp[i];
+        }
+    }
+
+    //基数排序（桶排序）
+    public static void radixSort(int[] arr){
+        // 思想： 将数组统一为一样的位数长度，依次从最低位进行排序
+        // 得到数组中最大的数的位数
+        int max = arr[0];
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > max){
+                max = arr[i];
+            }
+        }
+        int maxLength = (max + "").length();            // 最大数的位数
+        int[][] bucket = new int[10][arr.length];       //0 - 9,长度为数组长度
+        int[] ElementCounts = new int[10];              // 记录每个桶的元素个数（0-9）
+        for (int i = 0,n = 1; i < maxLength; i++,n *= 10) {
+            // 按照个、十、百的顺序放入桶中
+            for (int j = 0; j < arr.length; j++) {
+                // 取出个位数/十位数/百位数的值
+                int finalNum = arr[j] / n % 10;
+                // 放入桶中(ge表示该放哪个桶，)
+                bucket[finalNum][ElementCounts[finalNum]] = arr[j];
+                ElementCounts[finalNum]++;
+            }
+            // 遍历每一个桶，依次从桶中取出
+            int index = 0;
+            for (int k = 0; k < ElementCounts.length; k++) {
+                // 如果有数据则取出
+                if (ElementCounts[k] != 0){
+                    for (int l = 0; l < ElementCounts[k]; l++) {
+                        arr[index] = bucket[k][l];
+                        index++;
+                    }
+                }
+                ElementCounts[k] = 0;           // 将桶清零
+            }
+            System.out.println("第" + (i + 1)+ "轮，排序后 arr= " + Arrays.toString(arr));
+        }
     }
 
 
