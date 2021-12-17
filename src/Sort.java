@@ -356,7 +356,21 @@ public class Sort {
         }
     }
 
+    //堆排序
+    public void HeapSort(int[] arr){
+        // 升序 => 大顶堆   降序 => 小顶堆
 
+    }
+
+    /**
+     * 将数组（二叉树）调整成大顶堆
+     * @param arr 待调整的数组
+     * @param i 非叶子节点在数组中的索引
+     * @param length 对多少个元素进行调整(length 逐渐减少)
+     */
+    public void adjustHeap(int[] arr,int i,int length){
+
+    }
 
 
 }
