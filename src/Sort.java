@@ -15,7 +15,7 @@ public class Sort {
     @Test
     public void test(){
 
-        int maxSize = 5000000;
+        int maxSize = 8000000;
         System.out.println("*****************测试冒泡排序*****************************");
 //        testSolution(maxSize,"BubbleSort");
 
@@ -46,6 +46,9 @@ public class Sort {
 
         System.out.println("*****************测试基数排序************************");
         testSolution(maxSize,"radixSort");
+
+        System.out.println("*****************测试堆排序************************");
+        testSolution(maxSize,"HeapSort");
 
     }
 
@@ -359,7 +362,20 @@ public class Sort {
     //堆排序
     public void HeapSort(int[] arr){
         // 升序 => 大顶堆   降序 => 小顶堆
-
+        int temp = 0;
+        // 1. 将无序序列构建成堆
+        for (int i = arr.length / 2 - 1; i >= 0 ; i--) {
+            adjustHeap(arr,i,arr.length);
+        }
+        // 2. 将堆顶元素与末尾元素交换，使最大元素 “沉” 到数组末端
+        // 3. 重新调整结构，使其满足堆定义，然后继续交换堆顶元素与当前末尾元素，反复执行，直到有序
+        for (int j = arr.length - 1; j > 0; j--){
+            // 交换
+            temp = arr[j];
+            arr[j] = arr[0];
+            arr[0] = temp;
+            adjustHeap(arr,0,j);
+        }
     }
 
     /**
@@ -369,7 +385,23 @@ public class Sort {
      * @param length 对多少个元素进行调整(length 逐渐减少)
      */
     public void adjustHeap(int[] arr,int i,int length){
-
+        int temp = arr[i];          // 取出当前元素保存在临时变量中
+        // 开始调整 (k = i * 2 + 1 是 i 结点的左子结点)
+        for (int k = i * 2 + 1; k < length; k = k * 2 + 1) {
+            // 左子结点小于右子结点
+            if (k + 1 < length && arr[k] < arr[k+1]){
+                k++;        // K 指向右子结点
+            }
+            // 子结点大于父结点
+            if (arr[k] > temp){
+                arr[i] = arr[k];        // 把较大的值赋给当前结点
+                i = k;                  // i 指向 k, 循环比较
+            }else {
+                break;
+            }
+        }
+        // 循环结束后已经将以 i 为父结点的树的最大值放在了最顶 （局部）
+        arr[i] = temp;                  // 将Temp的值放到调整后的位置
     }
 
 
