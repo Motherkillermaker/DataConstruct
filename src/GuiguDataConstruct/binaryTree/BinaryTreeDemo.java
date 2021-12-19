@@ -1,4 +1,4 @@
-package GuiguDataConstruct.BinaryTree;
+package GuiguDataConstruct.binaryTree;
 
 /**
  * @title: BinaryTreeDemo

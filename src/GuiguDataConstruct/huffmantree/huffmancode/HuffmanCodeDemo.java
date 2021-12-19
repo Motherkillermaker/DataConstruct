@@ -1,5 +1,6 @@
 package GuiguDataConstruct.huffmantree.huffmancode;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +56,18 @@ public class HuffmanCodeDemo {
         System.out.println("原始字符串   " + str);
         System.out.println("解码后字符串  " + new String(unzipRes) );
 
+        System.out.println("***********************测试压缩文件(方法整合)**********************");
+//        String srcPath = "d://Uninstall.xml";
+//        String desPath = "D://dst.zip";
+//        huffmanCode1.ZipFile(srcPath,desPath);
+//        System.out.println("压缩文件成功 ！");
+
+
+        System.out.println("***********************测试解压文件文件(方法整合)**********************");
+//        String zipFile = "D://dst.zip";
+//        String desFile = "D://res.xml";
+//        huffmanCode1.unZipFile(zipFile,desFile);
+//        System.out.println("文件解压成功 ！");
 
     }
 

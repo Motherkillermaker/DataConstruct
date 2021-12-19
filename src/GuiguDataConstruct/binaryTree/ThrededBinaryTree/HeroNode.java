@@ -1,4 +1,4 @@
-package GuiguDataConstruct.BinaryTree.ThrededBinaryTree;
+package GuiguDataConstruct.binaryTree.ThrededBinaryTree;
 
 /** 二叉树结点
  * @title: HeroNode

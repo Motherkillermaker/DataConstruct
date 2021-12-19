@@ -1,4 +1,4 @@
-package GuiguDataConstruct.BinaryTree.ThrededBinaryTree;
+package GuiguDataConstruct.binaryTree.ThrededBinaryTree;
 
 /**
  * @title: ThrededBinaryTreeDemo

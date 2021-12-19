@@ -1,4 +1,4 @@
-package GuiguDataConstruct.BinaryTree;
+package GuiguDataConstruct.binaryTree;
 
 /** 构建二叉树
  * @title: BinaryTree
