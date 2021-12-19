@@ -1,17 +1,59 @@
-package GuiguDataConstruct.binarySortTree;/**
- *
- * @title: Node
- * @Author Tan
- * @Date: 2021/12/19 10:37
- * @Version 1.0
- */
+package GuiguDataConstruct.AVL;
+
 public class Node {
-    int value;
-    Node left;
-    Node right;
+    public int value;
+    public Node left;
+    public Node right;
 
     public Node(int value) {
         this.value = value;
+    }
+
+    // 左旋转方法
+    public void leftRotate(){
+        // 创建新的节点 => 以当前根节点
+        Node newRoot = new Node(value);
+        // 把新节点的左子树 设置 为当前节点的左子树
+        newRoot.left = left;
+        // 把新节点的右子树 设置 为当前节点右子树的左子树
+        newRoot.right = right.left;
+        // 把当前节点的值替换成右子节点的值
+        value = right.value;
+        // 把当前节点的右子树设置成当前节点的右子树的右子树
+        right = right.right;
+        // 把当前的左子节点设置成新的节点
+        left = newRoot;
+    }
+
+    // 右旋转方法
+    public void rightRotate(){
+        Node newRoot = new Node(value);
+        newRoot.right = right;
+        newRoot.left = left.right;
+        value = left.value;
+        left = left.left;
+        right = newRoot;
+    }
+
+    // 返回以当前节点为根节点的树的高度 => 递归求解
+    public int getHeight(){
+        return Math.max(left == null ? 0 : left.getHeight(),right == null ? 0 : right.getHeight()) + 1;
+    }
+
+    // 返回左子树的高度
+    public int leftHeight(){
+        if (left == null){
+            return 0;
+        }
+        return left.getHeight();
+    }
+
+    // 返回右子树的高度
+    public int rightHeight(){
+        if (right == null){
+            return 0;
+        }
+        return right.getHeight();
     }
 
     // 添加节点
@@ -38,6 +80,33 @@ public class Node {
                 this.right.add(node);
             }
         }
+        // 添加节点后树失衡
+        if (rightHeight() - leftHeight() > 1){
+            // 右子树的左子树高度 > 右子树的右子树高度
+            if (right != null && right.leftHeight() > right.rightHeight()){
+                // 对右子节点进行右旋转
+                right.rightRotate();
+                // 当前节点左旋转
+                leftRotate();
+            }else {
+                leftRotate();
+            }
+            // 添加完后直接结束方法
+            return;
+        }
+        if (leftHeight() - rightHeight() >1){
+            // 左子树的右子树高度 > 左子树的左子树高度
+            if (left != null && left.rightHeight() > left.leftHeight()){
+                // 先对当前节点左节点（左子树） => 左旋转
+                left.leftRotate();
+                // 再对当前节点进行右旋转
+                rightRotate();
+            }else {
+                // 直接进行右旋转
+                rightRotate();
+            }
+        }
+
     }
 
     // 查找要删除的结点
@@ -82,7 +151,6 @@ public class Node {
         }
     }
 
-
     // 中序遍历
     public void infixOrder(){
         if (this.left != null){
@@ -100,6 +168,5 @@ public class Node {
                 "value=" + value +
                 '}';
     }
-
 }
 

@@ -1,12 +1,6 @@
-package GuiguDataConstruct.binarySortTree;
+package GuiguDataConstruct.AVL;
 
-/** 二叉排序树
- * @title: BinarySortTree
- * @Author Tan
- * @Date: 2021/12/19 10:36
- * @Version 1.0
- */
-public class BinarySortTree {
+public class AVLTree {
 
     public Node root;
 
@@ -133,4 +127,3 @@ public class BinarySortTree {
     }
 
 }
-
