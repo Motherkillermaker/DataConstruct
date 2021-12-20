@@ -1,4 +1,4 @@
-package GuiguDataConstruct.AVL;
+package GuiguDataConstruct.avl;
 
 public class AVLTree {
 
