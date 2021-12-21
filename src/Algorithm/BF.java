@@ -1,7 +1,9 @@
+package Algorithm;
+
 import org.junit.Test;
 
 /**
- * @title: BF
+ * @title: Algorithm.BF
  * @Author Tan
  * @Date: 2021/11/30 16:34
  * @Version 1.0
@@ -19,7 +21,6 @@ public class BF {
     }
 
     //BF算法 （从头开始搜索）
-
     public  int indexBF(String S,String T){           // S为主串，T为字串
         char[] s = S.toCharArray();                  // 将字符串转换为字符数组
         char[] t = T.toCharArray();
