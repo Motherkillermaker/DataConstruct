@@ -5,10 +5,13 @@ package GuiguDataConstruct.binarySortTree;/**
  * @Date: 2021/12/19 10:37
  * @Version 1.0
  */
+
+
 public class Node {
     int value;
     Node left;
     Node right;
+
 
     public Node(int value) {
         this.value = value;

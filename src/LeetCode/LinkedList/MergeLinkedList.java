@@ -2,6 +2,9 @@ package LeetCode.LinkedList;
 
 import java.util.Arrays;
 
+/**
+ * LeetCode 21
+ */
 public class MergeLinkedList {
 
     public static void main(String[] args) {

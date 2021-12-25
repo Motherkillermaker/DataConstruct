@@ -1,6 +1,8 @@
-package LeetCode.LinkedList;
+package LeetCode.Array;
 
-/**
+import LeetCode.LinkedList.ListNode;
+
+/** LeetCode 2
  * @author CJYong
  * @create 2021-12-09 22:41
  */

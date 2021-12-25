@@ -6,6 +6,7 @@ package GuiguDataConstruct.binarySortTree;
  * @Date: 2021/12/19 10:37
  * @Version 1.0
  */
+
 public class BinarySortTreeDemo {
 
     public static void main(String[] args) {
