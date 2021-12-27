@@ -18,8 +18,47 @@ public class one {
         sortColors(array, 5);
         System.out.println(Arrays.toString(array));
         System.out.println("测试快速排序");
-        QuickSort(array);
+//        QuickSort(array);
         System.out.println(Arrays.toString(array));
+        System.out.println("测试选择排序");
+//        selectionSort(array);
+        System.out.println(Arrays.toString(array));
+        System.out.println("测试插入排序");
+        insertionSort(array);
+        System.out.println(Arrays.toString(array));
+
+    }
+
+    // 插入排序
+    public static void insertionSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+        //有多少张新牌需要插入，每次插入一张牌
+        for (int i = 1; i < arr.length; i++) {
+            //从排好序的最后面依次往前开始比较，新牌小就换到比较牌的前面
+            for (int j = i - 1; j >= 0 && arr[j] > arr[j + 1]; j--) {
+                swap(arr, j, j + 1);
+            }
+        }
+    }
+
+    // 选择排序
+    public static void selectionSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+        //范围每次缩小1，从前往后缩。
+        for (int i = 0; i < arr.length - 1; i++) {
+            //找范围内最小值，最开始默认是第一个
+            int minIndex = i;
+            for (int j = i + 1; j < arr.length; j++) {
+                //是否比目前最小值还小，如果是，则交换，否则不交换；
+                minIndex = arr[j] < arr[minIndex] ? j : minIndex;
+            }
+            //将最小值放到范围的第一个数
+            swap(arr, i, minIndex);
+        }
     }
 
     /**
@@ -42,7 +81,7 @@ public class one {
         }
     }
 
-    /**
+    /** 双指针
      * 给定一个数组arr，和一个数num，请把小于等于num的数放在数组的左边，大于num的数放在数组的右边，等于num的数放中间
      *
      * @param arr
