@@ -15,7 +15,7 @@ public class Sort {
     @Test
     public void test(){
 
-        int maxSize = 8000000;
+        int maxSize = 80;
         System.out.println("*****************测试冒泡排序*****************************");
 //        testSolution(maxSize,"BubbleSort");
 
@@ -38,11 +38,14 @@ public class Sort {
         testSolution(maxSize,"shellSort");
 
         System.out.println("*****************测试快速排序************************");
-        int[] arr = getRandomArray(maxSize);
-        long begin = System.currentTimeMillis();
-        QuickSort(arr,0,arr.length - 1);
-        long end = System.currentTimeMillis();
-        System.out.println("所花费时间为: " + (end - begin));
+//        int[] arr = getRandomArray(maxSize);
+//        long begin = System.currentTimeMillis();
+//        QuickSort(arr,0,arr.length - 1);
+//        long end = System.currentTimeMillis();
+//        System.out.println("所花费时间为: " + (end - begin));
+        int[] array = new int[]{5,6,2,3,4,1,9,10,12,5,3,8,5,6};
+        QuickSort(array,0,array.length -1);
+        System.out.println(Arrays.toString(array));
 
         System.out.println("*****************测试基数排序************************");
         testSolution(maxSize,"radixSort");
