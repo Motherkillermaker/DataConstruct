@@ -1,6 +1,11 @@
-import java.util.Arrays;
+import com.sun.deploy.util.StringUtils;
+
+import javax.swing.*;
+import java.util.*;
 
 /**
+ * LeetCode 15
+ *
  * @title: Script
  * @Author Tan
  * @Date: 2021/12/13 13:14
@@ -8,52 +13,55 @@ import java.util.Arrays;
  */
 public class Script {
     public static void main(String[] args) {
-        int[] arr = {3,4,5,6,1,2,3,4,5,4,3};
-        int num = 4;
-        System.out.println(Arrays.toString(arr));
-        quickSort(arr);
-        System.out.println(Arrays.toString(arr));
+//        int[] arr = new int[]{-1,0,1,2,-1,-4};
+        int[] arr = new int[]{-1,0,1,2,-1,-4,-2,-3,3,0,4};
+        List<List<Integer>> lists = threeSum(arr);
+        System.out.println(lists);
+
 
     }
 
-    public static void quickSort(int[] arr) {
-        if (arr == null || arr.length < 2) {
-            return;
+    public static List<List<Integer>> threeSum(int[] nums) {
+        if (nums == null) {
+            return null;
         }
-        quickSort(arr, 0, arr.length - 1);
-    }
-
-    public static void quickSort(int[] arr, int L, int R) {
-        if (L < R) {
-            //先随机取出一个数放到最后
-            swap(arr, L + (int) (Math.random() * (R - L + 1)), R);
-            int[] p = partition(arr, L, R);
-            quickSort(arr, L, p[0] - 1);
-            quickSort(arr, p[1] + 1, R);
-        }
-    }
-
-    public static int[] partition(int[] arr, int l, int r) {
-        int less = l - 1;
-        int more = r;
-        while (l < more) {
-            if (arr[l] < arr[r]) {
-                swap(arr, ++less, l++);
-            } else if (arr[l] > arr[r]) {
-                swap(arr, --more, l);
-            } else {
-                l++;
+        HashSet<String> hashSet = new HashSet<>();
+        List<List<Integer>> lists = new ArrayList<>();
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            // 固定一个元素 在剩下的元素中双指针查找
+            int j = i + 1;                  // 头指针
+            int k = nums.length - 1;        // 尾指针
+            while (j < k){
+                int sum = - (nums[j] + nums[k]);
+                if (sum == nums[i]){
+                    // 存在一个 a + b = - c
+                    ArrayList<Integer> integers = new ArrayList<>();
+                    integers.add(nums[i]);
+                    integers.add(nums[j]);
+                    integers.add(nums[k]);
+                    // 排序
+                    Collections.sort(integers);
+                    // 转为字符串
+                    String a = String.valueOf(integers.get(0));
+                    String b = String.valueOf(integers.get(1));
+                    String c = String.valueOf(integers.get(2));
+                    String s = a + b + c;
+                    // 结果没有重复则添加进结果集
+                    if (!hashSet.contains(s)) {
+                        lists.add(integers);
+                        hashSet.add(s);
+                    }
+                }else if (sum < nums[i]){
+                    j++;
+                }else {
+                    k--;
+                }
             }
         }
-        swap(arr, more, r);
-        return new int[] { less + 1, more };
+        return lists;
     }
 
-    public static void swap(int[] arr, int i, int j) {
-        int tmp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = tmp;
-    }
 
 }
 
