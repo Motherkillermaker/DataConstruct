@@ -28,10 +28,31 @@ public class Script {
 //        String s = firstPalindrome(words);
 //        System.out.println(s);
 
-        String word = "abcd";
-        char ch = 'z';
-        String s = reversePrefix(word, ch);
-        System.out.println(s);
+//        String word = "abcd";
+//        char ch = 'z';
+//        String s = reversePrefix(word, ch);
+//        System.out.println(s);
+
+        ListNode node1 = new ListNode(4);
+        ListNode node2 = new ListNode(1);
+        ListNode node3 = new ListNode(8);
+        ListNode node4 = new ListNode(4);
+        ListNode node5 = new ListNode(5);
+        ListNode node6 = new ListNode(5);
+        ListNode node7 = new ListNode(0);
+
+        ListNode node8 = new ListNode(1);
+
+        node1.next = node2;
+        node2.next = node3;
+        node3.next = node4;
+        node4.next = node5;
+        node5.next = node6;
+        node6.next = node7;
+
+        System.out.println(node1);
+        ListNode midNode = findMidNode(node1);
+        System.out.println(midNode);
 
 
     }
@@ -102,7 +123,7 @@ public class Script {
         for (int i = 0; i < words.length; i++) {
             String s = words[i];
             boolean b = isPalindrome(s);
-            if (b){
+            if (b) {
                 return s;
             }
         }
@@ -122,13 +143,13 @@ public class Script {
     }
 
     public ListNode getKthFromEnd(ListNode head, int k) {
-        if (head == null){
+        if (head == null) {
             return null;
         }
         int length = 0;
         ListNode temp = head;
         ListNode result = head;
-        while (temp != null){
+        while (temp != null) {
             length++;
             temp = temp.next;
         }
@@ -138,20 +159,20 @@ public class Script {
         return result;
     }
 
-    public void reverseString(char[] s) {
+    public static void reverseString(char[] s) {
         int low = 0;
         int high = s.length - 1;
-        while (low < high){
+        while (low < high) {
             char a = s[high];
             s[high] = s[low];
-            s[low] =a;
+            s[low] = a;
             low++;
             high--;
         }
     }
 
     public static String reversePrefix(String word, char ch) {
-        if (word == null){
+        if (word == null) {
             return null;
         }
         char[] chars = word.toCharArray();
@@ -174,11 +195,207 @@ public class Script {
         return new String(chars);
     }
 
+    public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        // A B 都不为空
+        // 统计 两个链表的长度
+        int lenA = 0;
+        int lenB = 0;
+        ListNode tempA = headA;
+        ListNode tempB = headB;
+        while (tempA != null) {
+            lenA++;
+            tempA = tempA.next;
+        }
+        while (tempB != null) {
+            lenB++;
+            tempB = tempB.next;
+        }
+        // 让长链表先走
+        tempA = headA;
+        tempB = headB;
+        int step = lenA - lenB;
+        if (step < 0) { // 链表B 长
+            for (int i = 0; i < Math.abs(step); i++) {
+                tempB = tempB.next;
+            }
+        } else if (step > 0) {     // 链表A 长
+            for (int i = 0; i < Math.abs(step); i++) {
+                tempA = tempA.next;
+            }
+        }
+        while (tempA != null && tempB != null && tempA != tempB) {
+            tempA = tempA.next;
+            tempB = tempB.next;
+        }
+        return tempA;
 
+    }
 
+    // 待做
+    public void reorderList(ListNode head) {
+        if (head == null) {
+            return;
+        }
+        ListNode low = head.next;
+        ListNode high = head;
+        ListNode result = head;
+        while (high != null) {
+            high = high.next;
+        }
+        while (low != high) {
 
+        }
 
+    }
+
+    public int[] twoSum(int[] numbers, int target) {
+        int low = 0;
+        int high = numbers.length - 1;
+        while (low < high) {
+            int sum = numbers[low] + numbers[high];
+            if (sum == target) {
+                return new int[]{low, high};
+            } else if (sum < target) {
+                low++;
+            } else {
+                high--;
+            }
+        }
+        return null;
+
+    }
+
+    public static boolean isPalindrome(ListNode head) {
+        if (head.next == null) {
+            // 只有一个结点
+            return true;
+        }
+        // 寻找到中点
+        ListNode midNode = findMidNode(head);
+        // 中点后面的链表反转
+        ListNode reverseHead = reverseNode(midNode);
+        // 比对两个链表
+        while (reverseHead != null) {
+            if (reverseHead.val == head.val) {
+                reverseHead = reverseHead.next;
+                head = head.next;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static ListNode findMidNode(ListNode head) {
+        if (head.next == null){
+            return head;
+        }
+        // 快慢指针寻找中间节点(基数为中间，偶数为中间两个的右边一个)
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        slow = slow.next;
+        return slow;
+    }
+
+    public static ListNode reverseNode(ListNode head) {
+        // 反转链表
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode current = head;
+        ListNode currentNext = null;
+        ListNode reverseHead = new ListNode(-1);
+        while (current != null) {
+            // 1.保留下一结点
+            currentNext = current.next;
+            // 2.搬操作
+            current.next = reverseHead.next;
+            // 3.连操作
+            reverseHead.next = current;
+            // 4.指针后移
+            current = currentNext;
+        }
+        // 5.丢弃中间节点 reverseHead
+        reverseHead = reverseHead.next;
+        return reverseHead;
+    }
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head.next == null) {
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        // 快指针先走 n 步
+        int i = 0;
+        while (fast != null && i < n) {
+            fast = fast.next;
+            i++;
+        }
+        if (fast == null) {
+            // 删除的是第一个结点
+            head = head.next;
+            return head;
+        }
+        // 快慢指针一起走
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        slow.next = slow.next.next;
+        return head;
+    }
+
+    // 待改
+    public ListNode sortList(ListNode head) {
+        if (head == null){
+            return null;
+        }
+        // 链表分成两半(head、midNode)
+        ListNode midNode = findMidNode(head);
+        while (head.next != midNode){
+            head = head.next;
+        }
+        head.next = null;
+        // 两个链表归并排序
+        if (midNode == head ){
+            return head;
+        }
+        ListNode temp1 = head;
+        ListNode temp2 = midNode;
+        ListNode newHead = new ListNode(-1);
+        ListNode temp = newHead;
+        while (temp1 != null && temp2 != null){
+            if (temp1.val <= temp2.val){
+                temp.next = temp1;
+                temp = temp.next;
+                temp1 = temp1.next;
+            }else {
+                temp.next = temp2;
+                temp = temp.next;
+                temp2 = temp2.next;
+            }
+        }
+        if (temp1 != null){
+            temp.next = temp1;
+        }
+        if (temp2 != null){
+            temp.next = temp2;
+        }
+        // 删除头结点
+        newHead = newHead.next;
+        return newHead;
+    }
 }
+
+
 
 
 
