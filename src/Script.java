@@ -1,7 +1,5 @@
 import LeetCode.LinkedList.ListNode;
-import com.sun.deploy.util.StringUtils;
 
-import javax.swing.*;
 import java.util.*;
 
 /**
@@ -33,15 +31,14 @@ public class Script {
 //        String s = reversePrefix(word, ch);
 //        System.out.println(s);
 
-        ListNode node1 = new ListNode(4);
-        ListNode node2 = new ListNode(1);
-        ListNode node3 = new ListNode(8);
+        ListNode node1 = new ListNode(1);
+        ListNode node2 = new ListNode(9);
+        ListNode node3 = new ListNode(3);
         ListNode node4 = new ListNode(4);
-        ListNode node5 = new ListNode(5);
-        ListNode node6 = new ListNode(5);
-        ListNode node7 = new ListNode(0);
-
-        ListNode node8 = new ListNode(1);
+        ListNode node5 = new ListNode(2);
+        ListNode node6 = new ListNode(4);
+        ListNode node7 = new ListNode(1);
+        ListNode node8 = new ListNode(8);
 
         node1.next = node2;
         node2.next = node3;
@@ -49,10 +46,16 @@ public class Script {
         node4.next = node5;
         node5.next = node6;
         node6.next = node7;
+        node7.next = node8;
 
-        System.out.println(node1);
-        ListNode midNode = findMidNode(node1);
-        System.out.println(midNode);
+
+        System.out.println("原始链表：" + node1);
+        ListNode listNode = sortList(node1);
+        System.out.println("排序后链表" + listNode);
+
+
+//        ListNode listNode = sortTwoList(node1, node5);
+//        System.out.println("排序后链表"  + listNode);
 
 
     }
@@ -98,7 +101,6 @@ public class Script {
         return lists;
     }
 
-
     public static String reverseLeftWords(String s, int n) {
         char[] s1 = s.toCharArray();
         char[] s2 = new char[s1.length];
@@ -142,7 +144,7 @@ public class Script {
         return true;
     }
 
-    public ListNode getKthFromEnd(ListNode head, int k) {
+    public static ListNode getKthFromEnd(ListNode head, int k) {
         if (head == null) {
             return null;
         }
@@ -251,7 +253,7 @@ public class Script {
 
     }
 
-    public int[] twoSum(int[] numbers, int target) {
+    public static int[] twoSum(int[] numbers, int target) {
         int low = 0;
         int high = numbers.length - 1;
         while (low < high) {
@@ -294,7 +296,8 @@ public class Script {
             return head;
         }
         // 快慢指针寻找中间节点(基数为中间，偶数为中间两个的右边一个)
-        ListNode fast = head;
+        // 初始值设为不同 => 重要
+        ListNode fast = head.next;
         ListNode slow = head;
         while (fast.next != null && fast.next.next != null) {
             slow = slow.next;
@@ -327,7 +330,7 @@ public class Script {
         return reverseHead;
     }
 
-    public ListNode removeNthFromEnd(ListNode head, int n) {
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
         if (head.next == null) {
             return null;
         }
@@ -353,25 +356,19 @@ public class Script {
         return head;
     }
 
-    // 待改
-    public ListNode sortList(ListNode head) {
-        if (head == null){
+    public static ListNode sortTwoList(ListNode head1, ListNode head2){
+        // 合并两个有序链表
+        if (head1 == null && head2 == null){
+            // 空链表
             return null;
         }
-        // 链表分成两半(head、midNode)
-        ListNode midNode = findMidNode(head);
-        while (head.next != midNode){
-            head = head.next;
-        }
-        head.next = null;
-        // 两个链表归并排序
-        if (midNode == head ){
-            return head;
-        }
-        ListNode temp1 = head;
-        ListNode temp2 = midNode;
+        // 定义新链表
         ListNode newHead = new ListNode(-1);
+        // 定义指针
         ListNode temp = newHead;
+        ListNode temp1 = head1;
+        ListNode temp2 = head2;
+        // 双指针扫描，将小数加入新链表
         while (temp1 != null && temp2 != null){
             if (temp1.val <= temp2.val){
                 temp.next = temp1;
@@ -389,10 +386,93 @@ public class Script {
         if (temp2 != null){
             temp.next = temp2;
         }
-        // 删除头结点
+        // 去掉初始头结点
         newHead = newHead.next;
         return newHead;
     }
+
+    public static ListNode sortList(ListNode head) {
+        // 链表排序 => 归并排序
+        // 条件判断
+        if (head == null){
+            return null;
+        }
+        if (head.next == null){
+            return head;
+        }
+        // 链表分成两半(head、midNode)
+        ListNode midNode = findMidNode(head);
+        // 定义链表指针 （注：对链表的操作都需要指针）
+        ListNode tempHead = head;
+        while (tempHead.next != midNode){
+            tempHead = tempHead.next;
+        }
+        tempHead.next = null;
+        // 第一段链表有序
+        ListNode firstList = sortList(head);
+        // 第二段链表有序
+        ListNode twoList = sortList(midNode);
+        // 归并排序好的链表
+        ListNode listNode = sortTwoList(firstList, twoList);
+        return listNode;
+    }
+
+    public static void moveZeroes(int[] nums) {
+        if (nums.length == 0){
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < nums.length - (1 + i); j++) {
+                if (nums[j] == 0){
+                    swap(nums,j, j+1);
+                }
+            }
+        }
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        if (i == j) {
+            return;
+        }
+        arr[i] = arr[i] ^ arr[j];
+        arr[j] = arr[i] ^ arr[j];
+        arr[i] = arr[i] ^ arr[j];
+    }
+
+    public static List<Integer> inorderTraversal(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (root != null){
+            infixOrder(root,list);
+        }else {
+            return list;
+        }
+        return list;
+    }
+
+    public static void infixOrder(TreeNode root,ArrayList<Integer> list){
+        if (root.left != null){
+            infixOrder(root.left,list);
+        }
+        list.add(root.val);
+        if (root.right != null){
+            infixOrder(root.right,list);
+        }
+    }
+
+    public static int[] reverseArray(int[] arr){
+        // 双指针反转数组
+        int low = 0;
+        int high = arr.length - 1;
+        while (low < high){
+            swap(arr,low,high);
+            low++;
+            high--;
+        }
+        return arr;
+    }
+
+
+
 }
 
 
