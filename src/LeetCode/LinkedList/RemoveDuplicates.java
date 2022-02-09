@@ -1,5 +1,7 @@
 package LeetCode.LinkedList;
 
+import WestLake.ListNode;
+
 import java.util.*;
 
 /** LeetCode 82 83

@@ -1,6 +1,6 @@
 package LeetCode.Array;
 
-import LeetCode.LinkedList.ListNode;
+import WestLake.ListNode;
 
 /** LeetCode 2
  * @author CJYong

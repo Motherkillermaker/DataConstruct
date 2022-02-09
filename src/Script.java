@@ -1,4 +1,4 @@
-import LeetCode.LinkedList.ListNode;
+import WestLake.ListNode;
 
 import java.util.*;
 
@@ -49,9 +49,12 @@ public class Script {
         node7.next = node8;
 
 
-        System.out.println("原始链表：" + node1);
-        ListNode listNode = sortList(node1);
-        System.out.println("排序后链表" + listNode);
+//        System.out.println("原始链表：" + node1);
+//        ListNode listNode = sortList(node1);
+//        System.out.println("排序后链表" + listNode);
+        System.out.println(node1);
+        ListNode reverseNode = reverseList(node1);
+        System.out.println(reverseNode);
 
 
 //        ListNode listNode = sortTwoList(node1, node5);
@@ -469,6 +472,25 @@ public class Script {
             high--;
         }
         return arr;
+    }
+
+    public static ListNode reverseList(ListNode head){
+        if (head == null || head.next == null){
+            return head;
+        }
+        ListNode cur = head;
+        ListNode pre = null;
+        while (cur != null){
+            //1.记录下一结点
+            ListNode curNext = cur.next;
+            //2.反转指针
+            cur.next = pre;
+            //3.往前走
+            pre = cur;
+            cur = curNext;
+        }
+        //4.pre为新链表表头 => 返回
+        return pre;
     }
 
 

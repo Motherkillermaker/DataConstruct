@@ -1,5 +1,7 @@
 package LeetCode.LinkedList;
 
+import WestLake.ListNode;
+
 /**
  * LeetCode 19
  */

@@ -1,4 +1,4 @@
-package LeetCode.LinkedList;
+package WestLake;
 
 public class ListNode{
     public int val;

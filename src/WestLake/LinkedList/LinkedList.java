@@ -1,8 +1,8 @@
 package WestLake.LinkedList;
 
-import LeetCode.LinkedList.ListNode;
+import WestLake.ListNode;
+import LeetCode.RandomNode;
 
-import java.lang.annotation.Target;
 import java.util.*;
 
 /**
@@ -221,15 +221,14 @@ public class LinkedList {
         if (head.next == null){
             return head;
         }
-        // 快慢指针寻找中间节点(基数为中间，偶数为中间两个的右边一个)
+        // 快慢指针寻找中间节点(基数为中间，偶数为中间两个的左边一个)
         // 初始值设为不同 => 重要
-        ListNode fast = head.next;
         ListNode slow = head;
+        ListNode fast = head.next;
         while (fast.next != null && fast.next.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
-        slow = slow.next;
         return slow;
     }
 
@@ -402,6 +401,28 @@ public class LinkedList {
             pre = pre.next;
         }
         return true;
+    }
+
+    public RandomNode copyRandomList(RandomNode head) {
+        HashMap<RandomNode, RandomNode> map = new HashMap<>();
+        //1.遍历链表的同时复制当前链表(仅节点值)
+        RandomNode cur = head;
+        while (cur != null){
+            map.put(cur,new RandomNode(cur.val));
+            cur = cur.next;
+        }
+        //2.再次遍历链表，设置next指针和random指针
+        cur = head;
+        while (cur != null){
+            //cur老节点   map.get(cur) 新节点
+            //设置新节点的next
+            map.get(cur).next = map.get(cur.next);
+            //设置新节点的random
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        //3.返回头节点
+        return map.get(head);
     }
 
 

@@ -1,5 +1,7 @@
 package LeetCode.LinkedList;
 
+import WestLake.ListNode;
+
 /**
  * @author CJYong
  * @create 2021-12-27 21:50

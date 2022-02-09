@@ -1,6 +1,6 @@
 package LeetCode.LinkedList;
 
-import java.util.Arrays;
+import WestLake.ListNode;
 
 /**
  * LeetCode 21
