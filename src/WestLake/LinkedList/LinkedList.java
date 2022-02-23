@@ -259,7 +259,7 @@ public class LinkedList {
         fast = head;
         while (slow != fast){
             slow = slow.next;
-            fast = fast.next.next;
+            fast = fast.next;
         }
         //快慢指针在入环结点相遇
         return slow;
